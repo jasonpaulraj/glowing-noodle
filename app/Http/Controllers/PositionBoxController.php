@@ -22,13 +22,7 @@ class PositionBoxController extends Controller
     {
 
         $data = PositionBox::take(1)->first();
-        // $data->position_box_content()->create([
-        //     'position_box_text_id' => '6582bc24-4206-4b07-8140-a774f7bd1e29',
-        //     'position' => '2',
-        //     'css_styling_code' => 'font-weight="400"',
-        //     'text_color' => 'red'
-        // ]);
-
+        // dd($data);
         return view('positionbox.index', compact('data', $data));
     }
 
@@ -55,18 +49,23 @@ class PositionBoxController extends Controller
         return redirect()->back()->with('success', 'New table successfully created.');
     }
 
-    public function addNewContent(PositionBox $positionBox, PositionBoxContentCreateRequest $request)
+    public function addNewContent(PositionBox $positionBox, Request $request)
     {
         $sentenceList = PositionBoxText::all();
-       
-        return view('positionbox.add-content', compact('positionBox','sentenceList'));
+
+        return view('positionbox.add-content', compact('positionBox', 'sentenceList'));
     }
 
     public function storeContent(PositionBox $positionBox, PositionBoxContentCreateRequest $request)
     {
         $request->validated();
         $request->position = json_encode($request->position);
-        $positionBox->position_box_content()->create([$request]);
+        $positionBox->position_box_content()->create([
+            "position" => $request->position,
+            "position_box_text_id" => $request->position_box_text_id,
+            "text_color" => $request->text_color,
+            "css_styling_code" => isset($request->css_styling_code) ? $request->css_styling_code : ''
+        ]);
 
         return redirect()->back()->with('success', 'New content successfully added.');
     }

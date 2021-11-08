@@ -24,7 +24,7 @@ class PositionBoxContentCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'position' => 'required|array',
+            'position' => 'required|string',
             'css_styling_code' => 'sometimes|string',
             'text_color' => 'sometimes|string',
             'position_box_text_id' => 'sometimes|string'

@@ -38,4 +38,5 @@ Route::group(['prefix' => 'positionbox', 'middleware' => 'auth'], function () {
     Route::get('{position_box}/add-content', [App\Http\Controllers\PositionBoxController::class, 'addNewContent'])->name('positionbox.content.add');
     Route::post('{position_box}/create', [App\Http\Controllers\PositionBoxController::class, 'storeContent'])->name('positionbox.store.content');
 });
+
 require __DIR__ . '/auth.php';

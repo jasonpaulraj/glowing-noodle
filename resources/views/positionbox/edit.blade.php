@@ -47,14 +47,14 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
     </form>
-    
-    <br>
-    <a class="btn btn-primary" href="{{ route('positionbox.content.add', ['position_box' => $positionBox['id']]) }}">ADD CONTENT</a>
-    <br>
 </div>
 <br /><br /><br /><br />
 <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
     <h1> Table Content Details </h1>
+    
+    <br>
+    <a class="btn btn-primary" href="{{ route('positionbox.content.add', ['position_box' => $positionBox['id']]) }}">ADD CONTENT</a>
+    <br>
     @if(isset($positionBox['position_box_content']) && !empty($positionBox['position_box_content']))
     <table class="table table-bordered" width="50%" border="1" cellpadding="3" cellspacing="0">
         <tr>

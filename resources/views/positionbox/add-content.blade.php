@@ -40,7 +40,7 @@
         </div>
         <div class="form-group">
             <label for="position_box_text_id">Sentence</label>
-            <select class="form-control" required="" name="position_box_text_id" id="country">
+            <select class="form-control" required="" name="position_box_text_id" id="position_box_text_id">
                 <option value="">Please select a sentence from the list.</option>
                 @foreach($sentenceList as $sentence)
                 <option value="{{$sentence['id']}}">{{$sentence['sentence']}}</option>
