@@ -3,55 +3,28 @@
 namespace App\Models;
 
 use App\Traits\UsesUuid;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class PositionBox extends Model
 {
+    use UsesUuid, HasFactory;
 
-    use UsesUuid, HasApiTokens, HasFactory, Notifiable;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'box_rows', 'box_columns', 'box_disable_rows', 'box_disable_columns', 'visibility'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $table = "position_box";
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
     protected $casts = [
         'id' => 'string',
-        'email_verified_at' => 'datetime',
     ];
-
-    protected $table = "users";
 
     protected static function boot()
     {
         parent::boot();
-        User::saving(function ($model) {
+        PositionBox::saving(function ($model) {
             if (Auth::user()) {
                 $model->updated_by = Auth::user()->id;
                 $model->created_by = Auth::user()->id;
@@ -73,5 +46,10 @@ class User extends Authenticatable
     public function editor()
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    public function position_box_content()
+    {
+        return $this->hasMany(PositionBoxContent::class);
     }
 }
