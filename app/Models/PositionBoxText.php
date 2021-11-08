@@ -19,4 +19,9 @@ class PositionBoxText extends Model
     protected $casts = [
         'id' => 'string',
     ];
+
+    public function position_box_contents()
+    {
+        return $this->hasMany(PositionBoxContent::class);
+    }
 }

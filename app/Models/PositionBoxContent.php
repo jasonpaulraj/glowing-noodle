@@ -12,7 +12,11 @@ class PositionBoxContent extends Model
     use UsesUuid, HasFactory;
 
     protected $fillable = [
-        'position','css_styling_code','text_color'
+        'position','css_styling_code','text_color','position_box_text_id'
+    ];
+
+    protected $with = [
+        'position_box_text'
     ];
 
     protected $table = "position_box_contents";
@@ -53,8 +57,8 @@ class PositionBoxContent extends Model
         return $this->belongsTo(PositionBox::class);
     }
 
-    public function position_box_texts()
+    public function position_box_text()
     {
-        return $this->hasMany(PositionBoxText::class);
+        return $this->belongsTo(PositionBoxText::class);
     }
 }

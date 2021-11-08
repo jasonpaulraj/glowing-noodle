@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PositionBoxContentCreateRequest;
+use App\Http\Requests\PositionBoxContentUpdateRequest;
 use App\Http\Requests\PositionBoxCreateRequest;
+use App\Http\Requests\PositionBoxUpdateRequest;
 use App\Http\Resources\PositionBoxCollection;
 use App\Http\Resources\PositionBoxResource;
 use App\Models\PositionBox;
+use App\Models\PositionBoxContent;
+use App\Models\PositionBoxText;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,35 +20,89 @@ class PositionBoxController extends Controller
 {
     public function index(PositionBox $positionBox)
     {
-        return new PositionBoxResource($positionBox);
-        return view('postionbox.index', compact('data'))
-            ->with('i', (request()->input('page', 1) - 1) * 5);
+
+        $data = PositionBox::take(1)->first();
+        // $data->position_box_content()->create([
+        //     'position_box_text_id' => '6582bc24-4206-4b07-8140-a774f7bd1e29',
+        //     'position' => '2',
+        //     'css_styling_code' => 'font-weight="400"',
+        //     'text_color' => 'red'
+        // ]);
+
+        return view('positionbox.index', compact('data', $data));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
     public function edit(PositionBox $positionBox)
     {
-        return view('postionbox.edit', compact('post'));
+        return view('positionbox.edit', compact('positionBox'));
     }
 
-    public function update(PositionBox $positionBox, Request $request)
+    public function editContent(PositionBox $positionBox, PositionBoxContent $positionBoxContent)
     {
-        Validator::make($request->all(), [
-            'name' => ['sometimes', 'string', Rule::unique('vehicles')->ignore($positionBox->id)],
-            'plate_number' => ['sometimes', 'string', Rule::unique('vehicles')->ignore($positionBox->id)],
-        ]);
-        $positionBox->name = $request->name;
-        $positionBox->plate_number = $request->plate_number;
+        $sentenceList = PositionBoxText::all();
+        $positionBoxText = PositionBoxText::findorfail($positionBoxContent['position_box_text']['id']);
+        return view('positionbox.edit-content', compact('positionBox', 'positionBoxContent', 'sentenceList', 'positionBoxText'));
+    }
+
+    public function store(PositionBoxCreateRequest $request)
+    {
+        $request->validated();
+        $positionBox = new PositionBox();
+        $positionBox->fill($request->validated());
+        $positionBox->save();
+
+
+        return redirect()->back()->with('success', 'New table successfully created.');
+    }
+
+    public function addNewContent(PositionBox $positionBox, PositionBoxContentCreateRequest $request)
+    {
+        $sentenceList = PositionBoxText::all();
+       
+        return view('positionbox.add-content', compact('positionBox','sentenceList'));
+    }
+
+    public function storeContent(PositionBox $positionBox, PositionBoxContentCreateRequest $request)
+    {
+        $request->validated();
+        $request->position = json_encode($request->position);
+        $positionBox->position_box_content()->create([$request]);
+
+        return redirect()->back()->with('success', 'New content successfully added.');
+    }
+
+    public function update(PositionBox $positionBox, PositionBoxUpdateRequest $request)
+    {
+        $positionBox->fill($request->validated());
 
         $positionBox->save();
 
-        return new PositionBoxResource($positionBox->fresh());
-        return redirect()->route('postionbox.index')
-            ->with('success', 'Post updated successfully');
+        return redirect()->route('positionbox.index')
+            ->with('success', 'Table updated successfully');
+    }
+
+    public function updateContent(PositionBox $positionBox, PositionBoxContent $positionBoxContent, PositionBoxContentUpdateRequest $request)
+    {
+        $positionBoxContent->fill($request->validated());
+        if (isset($request->position)) {
+            $positionBoxContent->position = json_encode($request->position);
+        }
+        $positionBoxContent->save();
+
+        return redirect()->back()->with('success', 'Content successfully updated.');
+    }
+
+    public function destroy(PositionBox $positionBox)
+    {
+        $positionBox->delete();
+
+        return redirect()->back()->with('success', 'Table successfully deleted.');
+    }
+
+    public function destroyContent(PositionBox $positionBox, PositionBoxContent $positionBoxContent)
+    {
+        $positionBoxContent->delete();
+
+        return redirect()->back()->with('success', 'Sentence successfully deleted.');
     }
 }

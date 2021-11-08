@@ -24,7 +24,11 @@ class PositionBoxUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'box_rows' => 'required|numeric|digits_between:1,10',
+            'box_columns' => 'required|numeric|digits_between:1,10',
+            'visibility' => 'sometimes|boolean',
+            'box_disable_rows' => 'sometimes|array',
+            'box_disable_columns' => 'sometimes|array'
         ];
     }
 }

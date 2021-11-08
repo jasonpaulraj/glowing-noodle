@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PositionBoxCreateRequest extends FormRequest
+class PositionBoxContentUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,10 @@ class PositionBoxCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'box_rows' => 'required|numeric|digits_between:1,10',
-            'box_columns' => 'required|numeric|digits_between:1,10',
-            'visibility' => 'sometimes|boolean',
-            'box_disable_rows' => 'sometimes|array',
-            'box_disable_columns' => 'sometimes|array'
+            'position' => 'required|string',
+            'css_styling_code' => 'sometimes|string',
+            'text_color' => 'sometimes|string',
+            'position_box_text_id' => 'sometimes|string'
         ];
     }
 }

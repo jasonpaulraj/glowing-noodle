@@ -21,6 +21,10 @@ class PositionBox extends Model
         'id' => 'string',
     ];
 
+    protected $with = [
+        'position_box_content'
+    ];
+
     protected static function boot()
     {
         parent::boot();
