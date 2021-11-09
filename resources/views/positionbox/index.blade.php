@@ -31,6 +31,9 @@
 
                    
 
+                        @endforeach 
+
+@endif 
                 <tr>
                 <!-- Repeat columns -->
                 @for($column=0;$column<$data['box_columns'];$column++) <!-- If the looped row & looped column matches the stipulated position for the sentence content, display the sentence -->
@@ -50,9 +53,6 @@
                     @endif
 
                 @endfor
-                @endforeach 
-
-@endif 
                 </tr>
                     
             @endfor
